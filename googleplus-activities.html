@@ -21,6 +21,7 @@
 <html>
   <head>
     <meta charset='utf-8' />
+    <script type="text/javascript" src="jquery.min.js"></script>
   </head>
   <body>
     <!--Add a button for the user to click to initiate auth sequence -->
@@ -31,7 +32,7 @@
       // The provided key works for this sample only when run from
       // https://google-api-javascript-client.googlecode.com/hg/samples/authSample.html
       // To use in your own application, replace this API key with your own.
-      var apiKey = '';
+      var apiKey = "AIzaSyBSnpUqQ4eZDVP5cXey_HtY7U8G-fTcJac";
 
       // Use a button to handle authentication the first time.
       function handleClientLoad() {
@@ -43,7 +44,7 @@
       function makeApiCall() {
         gapi.client.load('plus', 'v1', function() {
           var request = gapi.client.plus.people.get({
-            'userId': ''
+            'userId': '108086881826934773478'
             // For instance: 
             // 'userId': '+GregorioRobles'
           });
@@ -57,7 +58,34 @@
             document.getElementById('content').appendChild(heading);
           });
         });
+        
+        //AQUI HAGO LAS ACTIVIDADES
+        gapi.client.load('plus', 'v1', function() {
+          var request = gapi.client.plus.activities.list({
+            'userId': '108086881826934773478',
+            'collection': 'public'
+            // For instance: 
+            // 'userId': '+GregorioRobles'
+          });
+          request.execute(function(resp) {
+            var lista = document.createElement('ul');
+            
+            for (i in resp.items){
+                var elemento = document.createElement('li');
+                elemento.innerHTML = resp.items[i].title + "<a href='" + resp.items[i].url + "'>Link a la actividad</a>";
+                /////////////////////////////GEOLOCALIZACION
+                if(resp.items[i].location){
+                    elemento.innerHTML += "<strong> Posicion: " + resp.items[i].location.position.latitude + " , " + resp.items[i].location.position.longitude;
+                }
+                lista.appendChild(elemento);
+            }
+            
+            
+            document.getElementById('content2').appendChild(lista);
+          });
+        });
       }
+
     </script>
     <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
     <div id="content"></div>
